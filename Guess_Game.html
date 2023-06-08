@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Number guessing game</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+      
+      .form input[type="number"] {
+        width: 200px;
+      }
+
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body class="container mx-auto justify-content-center">
+    <h1>Number guessing game</h1>
+
+    <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+
+    <div class="form">
+      <label for="guessField">Enter a guess: </label>
+      <input type="number" min="1" max="100" required id="guessField" class="guessField">
+      <input type="submit" value="Submit guess" class="guessSubmit">
+    </div>
+
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="lastResult"></p>
+      <p class="lowOrHi"></p>
+    </div>
+
+    <script>
+
+      // Your JavaScript goes here
+      //Let for variable that can change values and const are for constant that does not value after first set
+
+      let randomNumber = Math.floor(Math.random() * 100) + 1; //Math.random() generates values from 0 to 1
+
+      const guesses = document.querySelector(".guesses"); //These constants save the values of respective classes inside them
+      const lastResult = document.querySelector(".lastResult");
+      const lowOrHi = document.querySelector(".lowOrHi");
+      
+      const guessField = document.querySelector(".guessField");
+      const guessSubmit = document.querySelector(".guessSubmit");
+
+      let guessCount = 1;
+      let resetButton;
+
+      function checkGuess()
+      {
+        //get the value from the guessField variable
+        const userGuess = Number(guessField.value);
+
+        if(guessCount===1)//Just for the first time this line is printed
+        {
+            guesses.textContent = "Previous Guesse : ";
+        }
+        
+        //Prints the previously added value on the screen
+        guesses.textContent += `${userGuess} `;
+
+        //if the entered value is same as the random number generated 
+        if(userGuess === randomNumber)
+        {
+            lastResult.textContent = "Congrats! you guessed it right";
+            lastResult.style.backgroundColor = 'green';
+            lowOrHi.textContent = "";
+            setGameOver();
+        }
+
+        //if the counter has reached 10
+        else if(guessCount === 10)
+        {
+            lastResult.textContent = "Game over!!";
+            lowOrHi.textContent = "";
+            setGameOver();
+        }
+
+        //neither the counter reached 10 nor the match has been found
+        else {
+            lastResult.textContent = "Wrong!";
+            lastResult.style.backgroundColor = "red";
+            if (userGuess < randomNumber) {
+                lowOrHi.textContent = "Last guess was too low!";
+            } else if (userGuess > randomNumber) {
+                lowOrHi.textContent = "Last guess was too high!";
+            }
+        }
+        guessCount++;
+        guessField.value = "";
+        guessField.focus();
+      }
+
+      //When either the match is found or the counter has reached 10
+      function setGameOver()
+      {
+        //disable the fields 
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        //on this point make a button appear on the page and the page is appended accordingly
+        resetButton = document.createElement("button");
+        resetButton.textContent = " Start over";
+        document.body.append(resetButton);
+        //add event listener that activates on click and event handler is activated 
+        resetButton.addEventListener("click" , resetGame);
+      }
+
+      function resetGame()
+      {
+        guessCount = 1;
+
+        const resetParas = document.querySelectorAll(".resultParas p");
+        for (const resetPara of resetParas) {
+            resetPara.textContent = "";
+        }
+
+        resetButton.parentNode.removeChild(resetButton);
+
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        guessField.value = "";
+        guessField.focus();
+
+        lastResult.style.backgroundColor = "white";
+
+        randomNumber = Math.floor(Math.random() * 100) + 1;
+
+      }
+      //Events are things that happen in the browser — a button being clicked, a page loading, 
+     // a video playing, etc. — in response to which we can run blocks of code.
+      // Event listeners observe specific events and call event handlers, which 
+      // are blocks of code that run in response to an event firing.
+
+      guessSubmit.addEventListener("click" , checkGuess);
+
+    </script>
+  </body>
+</html>
