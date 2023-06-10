@@ -56,17 +56,17 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="inputAge" class="col-sm-2 col-form-label">Age</label>
-        <div class="col-sm-10">
-          <input type="number" class="form-control" id="inputAge" placeholder="19">
-          <span class="error-message" id="age_error"></span>
-        </div>
-      </div>
-      <div class="form-group row">
         <label for="inputDate" class="col-sm-2 col-form-label">Date of birth</label>
         <div class="col-sm-10">
           <input type="date" class="form-control" id="inputDate" placeholder="11/12/2001">
           <span class="error-message" id="date_error"></span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputAge" class="col-sm-2 col-form-label">Age</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="inputAge" placeholder="19">
+          <span class="error-message" id="age_error"></span>
         </div>
       </div>
       <div class="form-group row">
@@ -89,7 +89,13 @@
           <input type="color" id="colorpicker" value="#0000ff">
         </div>
       </div>
-
+      <div class="form-group row">
+        <label for="inputFile" class="col-sm-2 col-form-label">Attach File:</label>
+        <div class="col-sm-10">
+          <input type="file" class="form-control" id="inputFile">
+          <span class="error-message" id="File_error"></span>
+        </div>
+      </div>
       <fieldset class="form-group">
         <div class="row">
           <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
@@ -137,6 +143,7 @@
               Example checkbox 3
             </label>
           </div>
+          <span class="check-error"></span>
         </div>
       </div>
       <div class="form-group row">
@@ -176,7 +183,27 @@
    let url_error = document.querySelector("#url_error");
    let inputUrl = document.querySelector("#inputUrl");
 
+   let file = document.querySelector("#inputFile");
+   let File_error = document.querySelector(".File_error");
+
+   let check_error = document.querySelector(".check-error");
+
    let Submit = document.querySelector(".Submit");
+
+   function checkFileError()
+   {
+      if(file.value=="")
+      {
+        File_error.innerHTML = "File not attached";
+        File_error.style.color = "red";
+        File_error.style.fontSize = "12px"
+        Submit.disabled = true;
+        return false;
+      }
+      else{
+        return true;
+      }
+   }
 
    function checkEmailError(){
       if(inputEmail3.value == "")
@@ -185,6 +212,7 @@
         email_error.style.color = "red";
         email_error.style.fontSize = "12px"
         Submit.disabled = true;
+        inputEmail3.style.borderColor = "red";
         return false;
       }
       else
@@ -193,6 +221,8 @@
         if(inputEmail3.value.match(mailformat))
         {
           email_error.innerHTML = "";
+          inputEmail3.style.borderColor = "LightGreen";
+          Submit.disabled = false;
           return true;
         }
         else
@@ -201,6 +231,7 @@
             email_error.style.color = "red";
             email_error.style.fontSize = "12px"
             Submit.disabled = true;
+            inputEmail3.style.borderColor = "red";
             return false;
         }
       }
@@ -213,6 +244,7 @@
         password_error.style.color = "red";
         password_error.style.fontSize = "12px"
         Submit.disabled = true;
+        inputPassword3.style.borderColor = "red";
         return false;
       }
       else
@@ -221,6 +253,8 @@
         if(inputPassword3.value.match(decimal))
         {
           password_error.innerHTML = "";
+          inputPassword3.style.borderColor = "LightGreen";
+          Submit.disabled = false;
           return true;
         }
         else
@@ -229,6 +263,7 @@
             password_error.style.color = "red";
             password_error.style.fontSize = "12px"
             Submit.disabled = true;
+            inputPassword3.style.borderColor = "red";
             return false;
         }
       }
@@ -241,6 +276,7 @@
           confirm_error.style.color = "red";
           confirm_error.style.fontSize = "12px"
           Submit.disabled = true;
+          inputConfirm.style.borderColor = "red";
           return false;
         }
         else
@@ -248,6 +284,8 @@
           if(inputPassword3.value == inputConfirm.value)
           {
             confirm_error.innerHTML = "";
+            inputConfirm.style.borderColor = "LightGreen";
+            Submit.disabled = false;
             return true;
           }
           else
@@ -256,6 +294,7 @@
               confirm_error.style.color = "red";
               confirm_error.style.fontSize = "12px"
               Submit.disabled = true;
+              inputConfirm.style.borderColor = "red";
               return false;
           }
         }
@@ -268,6 +307,7 @@
           name_error.style.color = "red";
           name_error.style.fontSize = "12px"
           Submit.disabled = true;
+          inputName.style.borderColor = "red";
           return false;
         }
         else
@@ -276,6 +316,8 @@
           if(inputName.value.match(char))
           {
             name_error.innerHTML = "";
+            inputName.style.borderColor = "LightGreen";
+            Submit.disabled = false;
             return true;
           }
           else
@@ -284,33 +326,8 @@
               name_error.style.color = "red";
               name_error.style.fontSize = "12px"
               Submit.disabled = true;
-              return false;
-          }
-        }
-    }
-    function checkAgeError()
-    {
-        if(inputAge.value == "")
-        {
-          age_error.innerHTML = "Field should be filled";
-          age_error.style.color = "red";
-          age_error.style.fontSize = "12px"
-          Submit.disabled = true;
-          return false;
-        }
-        else
-        {
-          if(inputAge.value >= 15 && inputAge.value <= 70)
-          {
-            age_error.innerHTML = "";
-            return true;
-          }
-          else
-          {
-              age_error.innerHTML = "Age between 15 to 70 is applicable";
-              age_error.style.color = "red";
-              age_error.style.fontSize = "12px"
-              Submit.disabled = true;
+              inputName.style.borderColor = "red";
+
               return false;
           }
         }
@@ -323,6 +340,8 @@
           contact_error.style.color = "red";
           contact_error.style.fontSize = "12px"
           Submit.disabled = true;
+          inputNumber.style.borderColor = "red";
+
           return false;
         }
         else
@@ -331,6 +350,8 @@
           if(inputNumber.value.match(decimal))
           {
             contact_error.innerHTML = "";
+            inputNumber.style.borderColor = "LightGreen";
+            Submit.disabled = false;
             return true;
           }
           else
@@ -339,9 +360,42 @@
               contact_error.style.color = "red";
               contact_error.style.fontSize = "12px"
               Submit.disabled = true;
+              inputNumber.style.borderColor = "red";
+
               return false;
           }
         }
+    }
+
+    function autofillAge() {
+        let dob = new Date(inputDate.value);
+        let now = new Date();
+        let age = now.getFullYear() - dob.getFullYear();
+
+        // Check if the birthday has not occurred yet this year
+        if (now.getMonth() < dob.getMonth() || (now.getMonth() === dob.getMonth() && now.getDate() < dob.getDate())) {
+          age--;
+        }
+
+        inputAge.value = age;
+        inputAge.disabled = true;
+          if(inputAge.value >= 15 && inputAge.value <= 70)
+          {
+            age_error.innerHTML = "";
+            inputAge.style.borderColor = "LightGreen";
+            Submit.disabled = false;
+            return true;
+          }
+          else
+          {
+              age_error.innerHTML = "Age between 15 to 70 is applicable";
+              age_error.style.color = "red";
+              age_error.style.fontSize = "12px"
+              Submit.disabled = true;
+              inputAge.style.borderColor = "red";
+              inputAge.disabled = true;
+              return false;
+          }
     }
     
     function checkDateError()
@@ -352,10 +406,15 @@
           date_error.style.color = "red";
           date_error.style.fontSize = "12px"
           Submit.disabled = true;
+          inputDate.style.borderColor = "red";
+
           return false;
         }
+        else{
+          autofillAge();
+        }
     }
-      
+    
     function checkCnicError()
     {
         if(inputCnic.value == "")
@@ -364,6 +423,8 @@
           cnic_error.style.color = "red";
           cnic_error.style.fontSize = "12px"
           Submit.disabled = true;
+          inputCnic.style.borderColor = "red";
+
           return false;
         }
         else
@@ -372,6 +433,8 @@
           if(inputCnic.value.match(decimal))
           {
             cnic_error.innerHTML = "";
+            inputCnic.style.borderColor = "LightGreen";
+            Submit.disabled = false;
             return true;
           }
           else
@@ -380,6 +443,8 @@
               cnic_error.style.color = "red";
               cnic_error.style.fontSize = "12px"
               Submit.disabled = true;
+              inputCnic.style.borderColor = "red";
+
               return false;
           }
         }
@@ -393,6 +458,8 @@
           url_error.style.color = "red";
           url_error.style.fontSize = "12px"
           Submit.disabled = true;
+          inputUrl.style.borderColor = "red";
+
           return false;
         }
         else
@@ -401,6 +468,8 @@
           if(inputUrl.value.match(urlPattern))
           {
             url_error.innerHTML = "";
+            inputUrl.style.borderColor = "LightGreen";
+            Submit.disabled = false;
             return true;
           }
           else
@@ -409,20 +478,54 @@
               url_error.style.color = "red";
               url_error.style.fontSize = "12px"
               Submit.disabled = true;
+            inputUrl.style.borderColor = "red";
+
               return false;
           }
         }
     }
 
+    function validateCheckbox() {
+      var checkbox1 = document.querySelector("#gridCheck1");
+      var checkbox2 = document.querySelector("#gridCheck2");
+      var checkbox3 = document.querySelector("#gridCheck3");
+
+      if(checkbox1.checked || checkbox2.checked || checkbox3.checked)
+      {
+        check_error.innerHTML = "";
+        return true;
+      }
+      else
+      {
+        check_error.innerHTML = "Minimum 1 check allowed";
+        check_error.style.color = "red";
+        check_error.style.borderColor= "red";
+        return false;
+      }
+    }
     function validateForm() {
-        let requiredFields = [inputEmail3, inputPassword3, inputConfirm, inputName, inputDate, inputNumber, inputCnic, inputUrl];
+        let requiredFields = [inputEmail3, inputPassword3, inputConfirm, inputName, inputDate, inputNumber, inputCnic, inputUrl , inputAge];
         let filledFields = requiredFields.filter(field => field.value !== "");
+
         //let filledFields = requiredFields.filter(field => field.value !== "");
 //This line creates a new array called filledFields using the filter() method. The filter() method is called on the requiredFields array and takes a callback function as an argument.
-        if (filledFields.length === 0) {
+        
+        if (filledFields.length === 0 || filledFields.length < requiredFields.length) {
           // No required fields are filled, form submission is invalid
           alert("Please fill in the fields");
-          return false;
+          for (let field of requiredFields) {
+            let errorMessage = field.nextElementSibling; // Get the next element (error message span)
+            errorMessage.innerHTML = ""; // Clear previous error message
+            field.style.borderColor = ""; // Clear previous error styling
+
+            if (field.value === "") {
+              errorMessage.innerHTML = "Field should be filled";
+              errorMessage.style.color = "red";
+              errorMessage.style.fontSize = "12px";
+              field.style.borderColor = "red";
+              isValid = false;
+            }
+          }
         } 
         else {
           // At least one required field is filled, perform other validations
@@ -443,22 +546,29 @@
       Submit.addEventListener("click", function(event) {
         event.preventDefault(); // Prevent form submission without performing the validations
 
-        if (validateForm()) {
+        if (validateForm() && validateCheckbox() && checkFileError()) {
           // Form is valid, submit it
           document.querySelector("form").submit();
         }
+        else
+        {
+            validateCheckbox();
+            checkFileError();
+        }
 });
 
+  inputDate.addEventListener("change", function() {
+    autofillAge();
+  });
 
-   inputEmail3.addEventListener("blur" , checkEmailError);
-   inputPassword3.addEventListener("blur" , checkPasswordError);
-   inputConfirm.addEventListener("blur" , checkConfirmError);
-   inputName.addEventListener("blur" , checkNameError);
-   inputCnic.addEventListener("blur" , checkCnicError);
-   inputNumber.addEventListener("blur" , checkContactError);
-   inputDate.addEventListener("blur" , checkDateError);
-   inputAge.addEventListener("blur" , checkAgeError);
-   inputUrl.addEventListener("blur" , checkUrlError);
+   inputEmail3.addEventListener("change" , checkEmailError);
+   inputPassword3.addEventListener("change" , checkPasswordError);
+   inputConfirm.addEventListener("change" , checkConfirmError);
+   inputName.addEventListener("change" , checkNameError);
+   inputCnic.addEventListener("change" , checkCnicError);
+   inputNumber.addEventListener("change" , checkContactError);
+   inputDate.addEventListener("change" , checkDateError);
+   inputUrl.addEventListener("change" , checkUrlError);
 
 </script>
 </html>
