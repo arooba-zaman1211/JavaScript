@@ -541,6 +541,7 @@
 
         if(email && password && confirm && name && date && url && cnic && contact && file && check)
         {
+          event.preventDefault();
           alert("Form submitted");
           return true;
         }
