@@ -17,7 +17,7 @@
     }
   </style>
 <body >
-    <form class="container mx-auto my-4">
+    <form class="container mx-auto my-4" onsubmit="return validateForm()">
       <h1>Form with Validations</h1>
       <br>
       <div class="form-group row">
@@ -86,7 +86,7 @@
       <div class="form-group row">
         <label for="color_picker" class="col-sm-2 col-form-label">Color Picker: </label>
         <div class="col-sm-10">
-          <input type="color" id="colorpicker" value="#0000ff">
+          <input type="color" id="color_picker" value="#0000ff">
         </div>
       </div>
       <div class="form-group row">
@@ -124,7 +124,7 @@
 
       <div class="form-group row">
         <div class="col-sm-2">Checkbox</div>
-        <div class="col-sm-10">
+        <div class="col-sm-10" id="check">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" id="gridCheck1">
             <label class="form-check-label" for="gridCheck1">
@@ -143,19 +143,17 @@
               Example checkbox 3
             </label>
           </div>
-          <span class="check-error"></span>
+          <span class="check_error"></span>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-sm-10">
-          <button type="submit" class="btn btn-primary Submit">Sign in</button>
+          <button type="submit" class="btn btn-primary " id="Submit">Sign in</button>
         </div>
       </div>
     </form>
-
 </body>
 <script>
-
    let email_error = document.querySelector("#email_error");
    let inputEmail3 = document.querySelector("#inputEmail3");
    
@@ -184,11 +182,14 @@
    let inputUrl = document.querySelector("#inputUrl");
 
    let file = document.querySelector("#inputFile");
-   let File_error = document.querySelector(".File_error");
+   let File_error = document.querySelector("#File_error");
 
-   let check_error = document.querySelector(".check-error");
+   let check_error = document.querySelector(".check_error");
+   let check = document.querySelector("#check");
 
-   let Submit = document.querySelector(".Submit");
+   let Submit = document.querySelector("#Submit");
+  
+   var returndate = false;
 
    function checkFileError()
    {
@@ -201,6 +202,7 @@
         return false;
       }
       else{
+        File_error.innerHTML = "";
         return true;
       }
    }
@@ -384,7 +386,10 @@
             age_error.innerHTML = "";
             inputAge.style.borderColor = "LightGreen";
             Submit.disabled = false;
-            return true;
+            returndate = true;
+            date_error.innerHTML = "";
+            inputDate.style.borderColor = "LightGreen";
+            return returndate;
           }
           else
           {
@@ -394,7 +399,9 @@
               Submit.disabled = true;
               inputAge.style.borderColor = "red";
               inputAge.disabled = true;
-              return false;
+              inputDate.style.borderColor = "red";
+              returndate = false;
+              return returndate;
           }
     }
     
@@ -407,11 +414,11 @@
           date_error.style.fontSize = "12px"
           Submit.disabled = true;
           inputDate.style.borderColor = "red";
-
-          return false;
+          returndate = false;
+          return returndate;
         }
         else{
-          autofillAge();
+          return autofillAge();
         }
     }
     
@@ -493,6 +500,7 @@
       if(checkbox1.checked || checkbox2.checked || checkbox3.checked)
       {
         check_error.innerHTML = "";
+        Submit.disbaled = false;
         return true;
       }
       else
@@ -503,72 +511,58 @@
         return false;
       }
     }
+    inputDate.addEventListener("input", function() {
+        autofillAge();
+      });
+
+   inputEmail3.addEventListener("input" , checkEmailError);
+   inputPassword3.addEventListener("input" , checkPasswordError);
+   inputConfirm.addEventListener("input" , checkConfirmError);
+   inputName.addEventListener("input" , checkNameError);
+   inputCnic.addEventListener("input" , checkCnicError);
+   inputNumber.addEventListener("input" , checkContactError);
+   inputDate.addEventListener("input" , checkDateError);
+   inputUrl.addEventListener("input" , checkUrlError);
+   file.addEventListener("input" , checkFileError );
+   check.addEventListener("input",validateCheckbox);
+
     function validateForm() {
-        let requiredFields = [inputEmail3, inputPassword3, inputConfirm, inputName, inputDate, inputNumber, inputCnic, inputUrl , inputAge];
-        let filledFields = requiredFields.filter(field => field.value !== "");
+       
+        let email = checkEmailError();
+        let password = checkPasswordError();
+        let confirm = checkConfirmError();
+        let name = checkNameError();
+        let date = checkDateError();
+        let url = checkUrlError();
+        let cnic = checkCnicError();
+        let contact = checkContactError();
+        let file = checkFileError();
+        let check = validateCheckbox();
 
-        //let filledFields = requiredFields.filter(field => field.value !== "");
-//This line creates a new array called filledFields using the filter() method. The filter() method is called on the requiredFields array and takes a callback function as an argument.
-        
-        if (filledFields.length === 0 || filledFields.length < requiredFields.length) {
-          // No required fields are filled, form submission is invalid
-          alert("Please fill in the fields");
-          for (let field of requiredFields) {
-            let errorMessage = field.nextElementSibling; // Get the next element (error message span)
-            errorMessage.innerHTML = ""; // Clear previous error message
-            field.style.borderColor = ""; // Clear previous error styling
+        if(email && password && confirm && name && date && url && cnic && contact && file && check)
+        {
+          alert("Form submitted");
+          return true;
+        }
 
-            if (field.value === "") {
-              errorMessage.innerHTML = "Field should be filled";
-              errorMessage.style.color = "red";
-              errorMessage.style.fontSize = "12px";
-              field.style.borderColor = "red";
-              isValid = false;
-            }
-          }
-        } 
         else {
-          // At least one required field is filled, perform other validations
-          let isValid = true;
-          isValid = checkEmailError() && isValid;
-          isValid = checkPasswordError() && isValid;
-          isValid = checkConfirmError() && isValid;
-          isValid = checkNameError() && isValid;
-          isValid = checkDateError() && isValid;
-          isValid = checkContactError() && isValid;
-          isValid = checkCnicError() && isValid;
-          isValid = checkUrlError() && isValid;
-
-          return isValid;
+            alert("Form not Submitted");
+            checkEmailError();
+            checkPasswordError();
+            checkConfirmError();
+            checkNameError();
+            checkDateError();
+            checkUrlError();
+            checkCnicError();
+            checkContactError();
+            checkFileError();
+            validateCheckbox();
+            event.preventDefault();
+            return false;
         }
       }
-
-      Submit.addEventListener("click", function(event) {
-        event.preventDefault(); // Prevent form submission without performing the validations
-
-        if (validateForm() && validateCheckbox() && checkFileError()) {
-          // Form is valid, submit it
-          document.querySelector("form").submit();
-        }
-        else
-        {
-            validateCheckbox();
-            checkFileError();
-        }
-});
-
-  inputDate.addEventListener("change", function() {
-    autofillAge();
-  });
-
-   inputEmail3.addEventListener("change" , checkEmailError);
-   inputPassword3.addEventListener("change" , checkPasswordError);
-   inputConfirm.addEventListener("change" , checkConfirmError);
-   inputName.addEventListener("change" , checkNameError);
-   inputCnic.addEventListener("change" , checkCnicError);
-   inputNumber.addEventListener("change" , checkContactError);
-   inputDate.addEventListener("change" , checkDateError);
-   inputUrl.addEventListener("change" , checkUrlError);
+ // document.querySelector("form").addEventListener("submit", validateForm);
 
 </script>
+
 </html>
